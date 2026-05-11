@@ -16,7 +16,7 @@ func initGenerator(level slog.Level) Generator {
 	generator := Generator{
 		Logger: logger,
 	}
-	generator.setAlgo(Healthy{}, 0) // No fuel type for battery
+	generator.setAlgo(Healthy{}, 0)
 	return generator
 
 }
@@ -71,15 +71,23 @@ func (g Generator) generateTelemetry() []Telemetry {
 	temp := g.algorithm.GenerateTemp()
 	soc := g.algorithm.GenerateSoC()
 	soh := g.algorithm.GenerateSoH()
+	auxV := g.algorithm.GenerateAuxVoltage()
+	auxC := g.algorithm.GenerateAuxCurrent()
+	starter := g.algorithm.GenerateStarterStatus()
+	alt := g.algorithm.GenerateAlternatorLoad()
 
 	telemetry := make([]Telemetry, 5)
 	for i := 0; i < len(telemetry); i++ {
 		telemetry[i] = Telemetry{
-			Voltage:     voltage,
-			Current:     current,
-			Temperature: temp,
-			SoC:         soc,
-			SoH:         soh,
+			Voltage:        voltage,
+			Current:        current,
+			Temperature:    temp,
+			SoC:            soc,
+			SoH:            soh,
+			AuxVoltage:     auxV,
+			AuxCurrent:     auxC,
+			StarterStatus:  starter,
+			AlternatorLoad: alt,
 		}
 	}
 	return telemetry

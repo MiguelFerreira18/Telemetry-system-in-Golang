@@ -28,6 +28,22 @@ func (h Healthy) GenerateSoH() float32 {
 	return HealthySoHBase + rand.Float32()*HealthySoHRange
 }
 
+func (h Healthy) GenerateAuxVoltage() float32 {
+	return HealthyAuxVoltageBase + rand.Float32()*HealthyAuxVoltageRange
+}
+
+func (h Healthy) GenerateAuxCurrent() float32 {
+	return HealthyAuxCurrentBase + rand.Float32()*HealthyAuxCurrentRange
+}
+
+func (h Healthy) GenerateStarterStatus() bool {
+	return rand.Intn(20) == 0
+}
+
+func (h Healthy) GenerateAlternatorLoad() float32 {
+	return 20.0 + rand.Float32()*30.0
+}
+
 func (u Unhealthy) GenerateVoltage() float32 {
 	if rand.Intn(VoltageFaultOdds) == 0 {
 		return UnhealthyVoltageBase + rand.Float32()*UnhealthyVoltageRange
@@ -61,4 +77,23 @@ func (u Unhealthy) GenerateSoH() float32 {
 		return UnhealthySoHBase + rand.Float32()*UnhealthySoHRange
 	}
 	return HealthySoHBase + rand.Float32()*HealthySoHRange
+}
+
+func (u Unhealthy) GenerateAuxVoltage() float32 {
+	if rand.Intn(AuxVoltageFaultOdds) == 0 {
+		return UnhealthyAuxVoltageBase + rand.Float32()*UnhealthyAuxVoltageRange
+	}
+	return HealthyAuxVoltageBase + rand.Float32()*HealthyAuxVoltageRange
+}
+
+func (u Unhealthy) GenerateAuxCurrent() float32 {
+	return 40.0 + rand.Float32()*40.0
+}
+
+func (u Unhealthy) GenerateStarterStatus() bool {
+	return rand.Intn(5) == 0
+}
+
+func (u Unhealthy) GenerateAlternatorLoad() float32 {
+	return 70.0 + rand.Float32()*25.0
 }

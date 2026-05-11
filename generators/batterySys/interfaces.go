@@ -8,6 +8,10 @@ type GenerationAlgo interface {
 	GenerateTemp() float32
 	GenerateSoC() float32
 	GenerateSoH() float32
+	GenerateAuxVoltage() float32
+	GenerateAuxCurrent() float32
+	GenerateStarterStatus() bool
+	GenerateAlternatorLoad() float32
 }
 
 type MessageBroker interface {

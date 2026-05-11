@@ -6,44 +6,50 @@ const (
 )
 
 const (
-	// Healthy ranges
 	HealthyVoltageBase  = 350.0
-	HealthyVoltageRange = 70.0 // 350-420V
+	HealthyVoltageRange = 70.0
 
 	HealthyCurrentBase  = -10.0
-	HealthyCurrentRange = 60.0 // -10 to +50A
+	HealthyCurrentRange = 60.0
 
 	HealthyTempBase  = 25.0
-	HealthyTempRange = 15.0 // 25-40°C
+	HealthyTempRange = 15.0
 
 	HealthySoCBase  = 60.0
-	HealthySoCRange = 30.0 // 60-90%
+	HealthySoCRange = 30.0
 
 	HealthySoHBase  = 95.0
-	HealthySoHRange = 5.0 // 95-100%
+	HealthySoHRange = 5.0
 
-	// Unhealthy ranges
+	HealthyAuxVoltageBase  = 12.6
+	HealthyAuxVoltageRange = 1.8
+	HealthyAuxCurrentBase  = 5.0
+	HealthyAuxCurrentRange = 25.0
+
 	UnhealthyVoltageBase  = 280.0
-	UnhealthyVoltageRange = 40.0 // 280-320V
+	UnhealthyVoltageRange = 40.0
 
 	UnhealthyCurrentBase  = 150.0
-	UnhealthyCurrentRange = 100.0 // 150-250A (Overcurrent)
+	UnhealthyCurrentRange = 100.0
 
 	UnhealthyTempBase  = 65.0
-	UnhealthyTempRange = 25.0 // 65-90°C (Overheating)
+	UnhealthyTempRange = 25.0
 
 	UnhealthySoCBase  = 2.0
-	UnhealthySoCRange = 8.0 // 2-10% (Critically Low)
+	UnhealthySoCRange = 8.0
 
 	UnhealthySoHBase  = 60.0
-	UnhealthySoHRange = 15.0 // 60-75% (Degraded)
+	UnhealthySoHRange = 15.0
 
-	// Fault probabilities (1-in-N chance of unhealthy reading)
-	VoltageFaultOdds = 5
-	CurrentFaultOdds = 4
-	TempFaultOdds    = 3
-	SoCFaultOdds     = 6
-	SoHFaultOdds     = 10
+	UnhealthyAuxVoltageBase  = 10.5
+	UnhealthyAuxVoltageRange = 1.5
+
+	VoltageFaultOdds    = 5
+	CurrentFaultOdds    = 4
+	TempFaultOdds       = 3
+	SoCFaultOdds        = 6
+	SoHFaultOdds        = 10
+	AuxVoltageFaultOdds = 7
 )
 
 const (

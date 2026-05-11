@@ -6,4 +6,9 @@ type Telemetry struct {
 	Temperature float32
 	SoC         float32
 	SoH         float32
+
+	AuxVoltage     float32
+	AuxCurrent     float32
+	StarterStatus  bool
+	AlternatorLoad float32
 }
