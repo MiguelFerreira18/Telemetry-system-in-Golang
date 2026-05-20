@@ -19,7 +19,11 @@ func initBroker() MessageBroker {
 			url: url,
 		}
 	} else {
-		url = fmt.Sprintf("amqp://%s:%s@localhost:5672/", user, password)
+		host := os.Getenv("BROKER_HOST")
+		if host == "" {
+			host = "localhost"
+		}
+		url = fmt.Sprintf("amqp://%s:%s@%s:5672/", user, password, host)
 		return &Rabbit{
 			url: url,
 		}

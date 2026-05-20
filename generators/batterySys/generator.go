@@ -77,7 +77,7 @@ func (g Generator) generateTelemetry() []Telemetry {
 	alt := g.algorithm.GenerateAlternatorLoad()
 
 	telemetry := make([]Telemetry, 5)
-	for i := 0; i < len(telemetry); i++ {
+	for i := range telemetry {
 		telemetry[i] = Telemetry{
 			Voltage:        voltage,
 			Current:        current,

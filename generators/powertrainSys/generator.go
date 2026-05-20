@@ -72,7 +72,7 @@ func (g Generator) generateTelemetry(fuel int) []Telemetry {
 	throttle := g.algorithm.GenerateThrottle()
 
 	telemetry := make([]Telemetry, 5)
-	for i := 0; i < len(telemetry); i++ {
+	for i := range telemetry {
 		telemetry[i] = Telemetry{
 			EngineTemp: engineTemp,
 			Rpm:        rpm,

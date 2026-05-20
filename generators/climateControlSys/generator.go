@@ -73,7 +73,7 @@ func (g Generator) generateTelemetry() []Telemetry {
 	air := g.algorithm.GenerateAirQuality()
 
 	telemetry := make([]Telemetry, 5)
-	for i := 0; i < len(telemetry); i++ {
+	for i := range telemetry {
 		telemetry[i] = Telemetry{
 			InteriorTemp: iTemp,
 			ExteriorTemp: eTemp,

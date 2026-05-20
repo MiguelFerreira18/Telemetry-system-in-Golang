@@ -1,0 +1,142 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+        RABBITMQ_DEFAULT_USER: myuser
+        RABBITMQ_DEFAULT_PASS: mypassword
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    
+  powertrain:
+    container_name: powertrainGen
+    build:
+      context: ./generators/powertrainSys
+      dockerfile: Dockerfile
+    ports:
+      - "9091:9091"
+    environment:
+        APP_MODE: ${APP_MODE}
+        BROKER_PWD: ${BROKER_PWD}
+        BROKER_USR: ${BROKER_USR}
+        BROKER_HOST: rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  battery:
+    container_name: batteryGen
+    build:
+      context: ./generators/batterySys
+      dockerfile: Dockerfile
+    ports:
+      - "9092:9092"
+    environment:
+        APP_MODE: ${APP_MODE}
+        BROKER_PWD: ${BROKER_PWD}
+        BROKER_USR: ${BROKER_USR}
+        BROKER_HOST: rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  brake:
+    container_name: brakesGen
+    build:
+      context: ./generators/brakeSys
+      dockerfile: Dockerfile
+    ports:
+      - "9093:9093"
+    environment:
+        APP_MODE: ${APP_MODE}
+        BROKER_PWD: ${BROKER_PWD}
+        BROKER_USR: ${BROKER_USR}
+        BROKER_HOST: rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  climate:
+    container_name: climateGen
+    build:
+      context: ./generators/climateControlSys
+      dockerfile: Dockerfile
+    ports:
+      - "9094:9094"
+    environment:
+        APP_MODE: ${APP_MODE}
+        BROKER_PWD: ${BROKER_PWD}
+        BROKER_USR: ${BROKER_USR}
+        BROKER_HOST: rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  telemetry:
+    container_name: telemetry
+    build:
+      context: ./telemetry
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+        APP_MODE: ${APP_MODE}
+        BROKER_PWD: ${BROKER_PWD}
+        BROKER_USR: ${BROKER_USR}
+        BROKER_HOST: rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yaml
+    depends_on:
+      telemetry:
+        condition: service_started
+
+  loki:
+    image: grafana/loki:latest
+    ports: 
+      - "3100:3100"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  alloy:
+    image: grafana/alloy:latest
+    volumes:
+      - ./config.alloy:/etc/alloy/config.alloy
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: run /etc/alloy/config.alloy
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    ports:
+      - "3001:3000"
+    depends_on:
+      prometheus:
+        condition: service_started
+      loki:
+        condition: service_started
+
+
+networks:
+  default:
+    driver: bridge
+   
